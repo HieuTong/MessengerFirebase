@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
+import GoogleSignIn
 
 class LoginViewController: UIViewController {
     
@@ -75,10 +76,21 @@ class LoginViewController: UIViewController {
         return button
     }()
     
-    //private let facebookLoginButton = FBLoginButton()
-
+    private let googleLogInButton = GIDSignInButton()
+    
+    private var logginObserver: NSObjectProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        logginObserver = NotificationCenter.default.addObserver(forName: .didLogInNotification, object: nil, queue: .main) { [weak self] (_) in
+            guard let strongSelf = self else { return }
+            
+            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+        }
+        
+        GIDSignIn.sharedInstance()?.presentingViewController = self
+        
         title = "Log In"
         view.backgroundColor = .white
         
@@ -95,7 +107,13 @@ class LoginViewController: UIViewController {
         scrollView.addSubview(passwordField)
         scrollView.addSubview(logginButton)
         scrollView.addSubview(facebookLoginButton)
-        
+        scrollView.addSubview(googleLogInButton)
+    }
+    
+    deinit {
+        if let observer = logginObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -113,6 +131,7 @@ class LoginViewController: UIViewController {
         
         logginButton.frame = CGRect(x: 30, y: passwordField.bottom + 10, width: scrollView.width - 60, height: 52)
         facebookLoginButton.frame = CGRect(x: 30, y: logginButton.bottom + 10, width: scrollView.width - 60, height: 52)
+        googleLogInButton.frame = CGRect(x: 30, y: facebookLoginButton.bottom + 10, width: scrollView.width - 60, height: 52)
 
     }
     
@@ -133,9 +152,6 @@ class LoginViewController: UIViewController {
                 print("Failed to log in user with email: \(email)")
                 return
             }
-            
-            
-            
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         }
     }
