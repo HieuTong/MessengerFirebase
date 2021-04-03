@@ -24,6 +24,8 @@
 		E7876EE9260873D0000FD352 /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7876EE8260873D0000FD352 /* NewConversationViewController.swift */; };
 		E7876EEC260873EF000FD352 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7876EEB260873EF000FD352 /* ProfileViewController.swift */; };
 		E7876EF126087F8A000FD352 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7876EF026087F8A000FD352 /* Extensions.swift */; };
+		E7F6488A26162D240012C9A4 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F6488926162D240012C9A4 /* ChatViewController.swift */; };
+		E7FA20A72617007D007708AB /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FA20A62617007D007708AB /* StorageManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +50,8 @@
 		E7876EE8260873D0000FD352 /* NewConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationViewController.swift; sourceTree = "<group>"; };
 		E7876EEB260873EF000FD352 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		E7876EF026087F8A000FD352 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		E7F6488926162D240012C9A4 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		E7FA20A62617007D007708AB /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +117,7 @@
 				E7876EE8260873D0000FD352 /* NewConversationViewController.swift */,
 				E7876EEB260873EF000FD352 /* ProfileViewController.swift */,
 				E73CFCD8260B712400DA0851 /* TabBarViewController.swift */,
+				E7F6488926162D240012C9A4 /* ChatViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -147,6 +152,7 @@
 				E7876EC726085A37000FD352 /* Assets.xcassets */,
 				E7876EF026087F8A000FD352 /* Extensions.swift */,
 				E73CFC73260AE98B00DA0851 /* DatabaseManager.swift */,
+				E7FA20A62617007D007708AB /* StorageManager.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -313,12 +319,14 @@
 				E7876EDC2608608B000FD352 /* LoginViewController.swift in Sources */,
 				E73CFC74260AE98B00DA0851 /* DatabaseManager.swift in Sources */,
 				E7876EE02608609B000FD352 /* RegisterViewController.swift in Sources */,
+				E7FA20A72617007D007708AB /* StorageManager.swift in Sources */,
 				E7876EE9260873D0000FD352 /* NewConversationViewController.swift in Sources */,
 				E73CFCD9260B712400DA0851 /* TabBarViewController.swift in Sources */,
 				E7876EC326085A36000FD352 /* ConversationViewController.swift in Sources */,
 				E7876EE6260873AB000FD352 /* VideoPlayerViewController.swift in Sources */,
 				E7876EF126087F8A000FD352 /* Extensions.swift in Sources */,
 				E7876EBF26085A36000FD352 /* AppDelegate.swift in Sources */,
+				E7F6488A26162D240012C9A4 /* ChatViewController.swift in Sources */,
 				E7876EEC260873EF000FD352 /* ProfileViewController.swift in Sources */,
 				E7876EC126085A36000FD352 /* SceneDelegate.swift in Sources */,
 				E7876EE326087396000FD352 /* PhotoViewerViewController.swift in Sources */,

@@ -9,8 +9,11 @@ import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
 import GoogleSignIn
+import JGProgressHUD
 
 class LoginViewController: UIViewController {
+    
+    private let spinner = JGProgressHUD(style: .dark)
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -145,9 +148,17 @@ class LoginViewController: UIViewController {
             return
         }
         
+        spinner.show(in: view)
         //Firebase Log in
         FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password) { [weak self] (authResult, error) in
-            guard let strongSelf = self else { return }
+            guard let strongSelf = self else {
+                return
+            }
+            
+            DispatchQueue.main.async {
+                strongSelf.spinner.dismiss()
+            }
+            
             guard let result = authResult, error == nil else {
                 print("Failed to log in user with email: \(email)")
                 return
@@ -191,27 +202,50 @@ extension LoginViewController: LoginButtonDelegate {
             return
         }
         
-        let facebookRequest = FBSDKLoginKit.GraphRequest(graphPath: "me", parameters: ["fields":"email,name"], tokenString: token, version: nil, httpMethod: .get)
+        let facebookRequest = FBSDKLoginKit.GraphRequest(graphPath: "me", parameters: ["fields":"email, first_name, last_name, pictures.type(large)"], tokenString: token, version: nil, httpMethod: .get)
         facebookRequest.start { (_, result, error) in
             guard let result = result as? [String:Any], error == nil else {
                 print("Failed to make facebook graph request")
                 return
             }
             
-            guard let userName = result["name"] as? String, let email = result["email"] as? String else {
+            print(result)
+            
+            return
+            
+            guard let firstName = result["first_name"] as? String,
+                  let lastName = result["last_name"] as? String,
+                  let email = result["email"] as? String else {
                 print("Failed to get email and name from fb result")
                 return
             }
             
-            let nameComponents = userName.components(separatedBy: " ")
-            guard nameComponents.count == 2 else { return }
+//            let firstName = nameComponents[0]
+//            let lastName = nameComponents[1]
             
-            let firstName = nameComponents[0]
-            let lastName = nameComponents[1]
-            
-            DatabaseManager.shared.userExists(with: email) { (exists) in
+            DatabaseManager.shared.userExists(with: email) { [weak self] (exists) in
+                guard let strongSelf = self else { return }
+
                 if !exists {
-                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+                    let chatUser = ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email)
+                    DatabaseManager.shared.insertUser(with: chatUser, completion: { success in
+                        if success {
+                            //upload image
+                            guard let image = strongSelf.imageView.image, let data = image.pngData() else {
+                                return
+                            }
+                            let filename = chatUser.profilePictureFileName
+//                            StorageManager.shared.uploadProfilePicture(with: data, fileName: filename) { (result) in
+//                                switch result {
+//                                case .success(let downloadUrl):
+//                                    UserDefaults.standard.set(downloadUrl, forKey: "profile_picture_url")
+//                                    print(downloadUrl)
+//                                case .failure(let error):
+//                                    print("Storage manager error: \(error)")
+//                                }
+//                            }
+                        }
+                    })
                 }
             }
             
