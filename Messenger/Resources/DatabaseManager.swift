@@ -126,6 +126,69 @@ extension DatabaseManager {
     }
 }
 
+//MARK: -SENDING
+
+extension DatabaseManager {
+    
+    /*
+      "dfdfdfdf" {
+        "messages": [
+            {
+                "id": String
+                "type": text, photo, video,
+                "content": String,
+                "date": Date(),
+                "sender_email": String,
+                "isRead": true/false,
+            }
+        ]
+      }
+      conversation => [
+        [
+            "conversation_id": "dfdfdfdf",
+            "other_user_email":
+            "latest_message": => {
+                "date": Date(),
+                "latest_message": "message",
+                "is_read": true/false
+            }
+        ]
+      ]
+     */
+    
+    //creates
+    public func createNewConversation(with otherUserEmail: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
+        guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String else {
+            return
+        }
+        
+        let safeEmail = DatabaseManager.safeEmail(emailAddress: currentEmail)
+        
+        database.child("\(safeEmail)").observeSingleEvent(of: .value) { (snapshot) in
+            <#code#>
+        } withCancel: { (<#Error#>) in
+            <#code#>
+        }
+
+    }
+    
+    //fetches and returns all conversations for the user with passed in email
+    public func getAllConversations(for email: String, completion: @escaping (Result<String, Error>) -> Void) {
+        
+    }
+    
+    // gets all messages for a given conversation
+    public func getAllMessagesForConversation(with id: String, completion: @escaping (Result<String, Error> ) -> Void) {
+        
+    }
+    
+    
+    //sends a message with target conversation and message
+    public func sendMessage(to conversation: String, message: Message, completion: @escaping (Bool) -> Void) {
+        
+    }
+}
+
 
 struct ChatAppUser {
     let firstName: String
