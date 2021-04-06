@@ -163,11 +163,56 @@ extension DatabaseManager {
         }
         
         let safeEmail = DatabaseManager.safeEmail(emailAddress: currentEmail)
-        
-        database.child("\(safeEmail)").observeSingleEvent(of: .value) { (snapshot) in
-            <#code#>
-        } withCancel: { (<#Error#>) in
-            <#code#>
+        let ref = database.child("\(safeEmail)")
+        ref.observeSingleEvent(of: .value) { (snapshot) in
+            guard let userNode  = snapshot.value as? [String:Any] else {
+                completion(false)
+                print("user not found")
+                return
+            }
+            let messageDate = firstMessage.sentDate
+            let dateString = ChatViewController.dateFormatter.string(from: messageDate)
+            var message = ""
+            switch firstMessage.kind {
+            case .text( let messageText):
+                message = messageText
+            case .attributedText(_):
+                break
+            case .photo(_):
+                break
+            case .video(_):
+                break
+            case .location(_):
+                break
+            case .emoji(_):
+                break
+            case .audio(_):
+                break
+            case .contact(_):
+                break
+            case .linkPreview(_):
+                break
+            case .custom(_):
+                break
+            }
+            
+            let newConversationData: [String:Any] = [
+                "id": "",
+                "other_user_email": otherUserEmail,
+                "latest_message": [
+                    "date": dateString,
+                    "message": message,
+                    "is_read": false,
+                    
+                ]
+            ]
+            
+            
+            if var conversation = userNode["conversations"]  as? [[String:  Any]] {
+                
+            } else {
+                
+            }
         }
 
     }
