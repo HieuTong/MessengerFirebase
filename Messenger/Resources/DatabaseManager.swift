@@ -156,7 +156,7 @@ extension DatabaseManager {
      */
     
     //creates
-    public func createNewConversation(with otherUserEmail: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
+    public func createNewConversation(with otherUserEmail: String, name: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
         guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String else {
             return
         }
@@ -199,11 +199,12 @@ extension DatabaseManager {
             let newConversationDate: [String:Any] = [
                 "id": conversationID,
                 "other_user_email": otherUserEmail,
+                "name": name,
                 "latest_message": [
                     "date": dateString,
                     "message": message,
                     "is_read": false,
-                    
+                    "name": name
                 ]
             ]
             
@@ -219,7 +220,7 @@ extension DatabaseManager {
                         return
                     }
                     
-                    self?.finishCreatingConversation(conversationID: conversationID, firstMessage: firstMessage, completion: completion)
+                    self?.finishCreatingConversation(name: name, conversationID: conversationID, firstMessage: firstMessage, completion: completion)
                     completion(true)
                 }
             } else {
@@ -235,7 +236,7 @@ extension DatabaseManager {
                         return
                     }
                     
-                    self?.finishCreatingConversation(conversationID: conversationID, firstMessage: firstMessage, completion: completion)
+                    self?.finishCreatingConversation(name: name, conversationID: conversationID, firstMessage: firstMessage, completion: completion)
                     completion(true)
                 }
             }
@@ -243,7 +244,7 @@ extension DatabaseManager {
 
     }
     
-    private func finishCreatingConversation(conversationID: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
+    private func finishCreatingConversation(name: String, conversationID: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
 //        {
 //            "id": String
 //            "type": text, photo, video,
