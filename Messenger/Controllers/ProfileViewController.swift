@@ -120,7 +120,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             do {
                 try FirebaseAuth.Auth.auth().signOut()
                 
-//                self?.clearDatabase()
+                self?.clearDatabase()
                 let vc = LoginViewController()
                 let nav = UINavigationController(rootViewController: vc)
                 nav.modalPresentationStyle = .fullScreen
