@@ -80,7 +80,6 @@
 		E7876EB226085A36000FD352 = {
 			isa = PBXGroup;
 			children = (
-				E7DDA337262156FC005359E3 /* ConversationTableViewCell.swift */,
 				E7876EBD26085A36000FD352 /* Messenger */,
 				E7876EBC26085A36000FD352 /* Products */,
 				BA881A08C28BED31CEF06F93 /* Pods */,
@@ -128,6 +127,7 @@
 		E7876ED426085C35000FD352 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E7DDA337262156FC005359E3 /* ConversationTableViewCell.swift */,
 				E7876ED826085F4D000FD352 /* Storyboards */,
 			);
 			path = Views;

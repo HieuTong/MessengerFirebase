@@ -21,6 +21,18 @@ final class DatabaseManager {
     }
 }
 
+extension DatabaseManager {
+    public func getDataFor(path: String, completion: @escaping (Result<Any, Error>) -> Void) {
+        self.database.child("\(path)").observeSingleEvent(of: .value) { snapshot in
+            guard let value = snapshot.value else {
+                completion(.failure(DatabaseError.failedToFetch))
+                return
+            }
+            completion(.success(value))
+        }
+    }
+}
+
 ///MARK:  - Account Management
 
 extension DatabaseManager {
@@ -157,7 +169,7 @@ extension DatabaseManager {
     
     //creates
     public func createNewConversation(with otherUserEmail: String, name: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
-        guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String else {
+        guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String, let currentName = UserDefaults.standard.value(forKey: "email") as? String else {
             return
         }
         
@@ -210,7 +222,7 @@ extension DatabaseManager {
             let recipient_newConversationData: [String:Any] = [
                 "id": conversationID,
                 "other_user_email": safeEmail,
-                "name": "Self",
+                "name": currentName,
                 "latest_message": [
                     "date": dateString,
                     "message": message,
@@ -223,7 +235,7 @@ extension DatabaseManager {
                 if var conversations = snapshot.value as? [[String:Any]] {
                     //append
                     conversations.append(recipient_newConversationData)
-                    self?.database.child("\(otherUserEmail)/conversations").setValue(conversationID)
+                    self?.database.child("\(otherUserEmail)/conversations").setValue(conversations)
                 } else {
                     //create
                     self?.database.child("\(otherUserEmail)/conversations").setValue([recipient_newConversationData])
@@ -407,7 +419,9 @@ extension DatabaseManager {
     
     //sends a message with target conversation and message
     public func sendMessage(to conversation: String, message: Message, completion: @escaping (Bool) -> Void) {
-        
+        // add new message to messages
+        // update sender latest message
+        // update recipient latest message
     }
 }
 

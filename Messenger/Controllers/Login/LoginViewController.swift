@@ -161,13 +161,32 @@ class LoginViewController: UIViewController {
             DispatchQueue.main.async {
                 strongSelf.spinner.dismiss()
             }
+    
             
             guard let result = authResult, error == nil else {
                 print("Failed to log in user with email: \(email)")
                 return
             }
             
+            let user = result.user
+            let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+            DatabaseManager.shared.getDataFor(path:safeEmail, completion: { [weak self] result in
+                switch result {
+                case .success(let data):
+                    guard let userData = data as? [String:Any],
+                          let firstName = userData["first_name"] as? String,
+                          let lastName = userData["last_name"] as? String
+                          else {
+                        return
+                    }
+                    UserDefaults.standard.set("\(firstName) \(lastName)", forKey: "name")
+                case .failure(let error):
+                    print("Failed to read data with error: \(error)")
+                }
+            })
+
             UserDefaults.standard.set(email, forKey: "email")
+            
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         }
     }
@@ -224,8 +243,9 @@ extension LoginViewController: LoginButtonDelegate {
                 return
             }
             
-//            let firstName = nameComponents[0]
-//            let lastName = nameComponents[1]
+            UserDefaults.standard.set(email, forKey: "email")
+            UserDefaults.standard.set("\(firstName) \(lastName)", forKey: "name")
+
             
             DatabaseManager.shared.userExists(with: email) { [weak self] (exists) in
                 if !exists {

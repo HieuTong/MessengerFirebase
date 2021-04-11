@@ -134,20 +134,31 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         }
         
         print("Sending: \(text)")
-        
+        let message = Message(sender: selfSender, messageId: messageId, sentDate: Date(), kind: .text(text))
         //Send message
         if isNewConversation {
-            let message = Message(sender: selfSender, messageId: messageId, sentDate: Date(), kind: .text(text))
+            
             //create convo in database
             DatabaseManager.shared.createNewConversation(with: otherUserEmail, name: self.title ?? "User", firstMessage: message) { [weak self] (success) in
                 if success {
                     print("message sent")
+                    self?.isNewConversation = false
                 } else {
                      print("failed out sent")
                 }
             }
         } else {
+            guard let conversationId = conversationId else {
+                return
+            }
             //append to existing conversation data
+            DatabaseManager.shared.sendMessage(to: conversationId, message: message) { (success) in
+                if success {
+                    print("message sent")
+                } else {
+                    print("failed out sent")
+                }
+            }
         }
     }
     
